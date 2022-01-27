@@ -38,6 +38,7 @@ RUN apt install -y build-essential \
     nano \
     pwgen \
     iputils-ping \
+    dnsutils \
     postgresql-client \
     mariadb-client \
     redis-tools
