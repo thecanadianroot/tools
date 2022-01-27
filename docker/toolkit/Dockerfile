@@ -37,6 +37,7 @@ RUN apt install -y build-essential \
     rsync \
     nano \
     pwgen \
+    iputils-ping \
     postgresql-client \
     mariadb-client \
     redis-tools
