@@ -18,7 +18,7 @@ USER_NAME=${USER_NAME:-toolkit}
 
 exec s6-setuidgid root service ssh start & \
     s6-setuidgid ${USER_NAME} \
-        /usr/local/bin/code-server \
+        /app/code-server/bin/code-server \
             --bind-addr 0.0.0.0:8443 \
             --user-data-dir /config/data \
             --extensions-dir /config/extensions \
