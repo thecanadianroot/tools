@@ -6,8 +6,8 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt update && apt install -y curl wget git apt-transport-https ca-certificates gnupg openssl man-db
 
 # Programming langages
-RUN apt install -y python3 python3-pip python3-venv openjdk-17-jdk-headless npm maven gradle
-RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash - && apt install -y nodejs
+RUN apt install -y python3 python3-pip python3-venv openjdk-17-jdk-headless maven gradle
+RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash - && apt install -y nodejs npm
 
 # Google SDK
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | \
