@@ -50,14 +50,6 @@ RUN apt install -y build-essential \
     mariadb-client \
     redis-tools
 
-# OhMyZsh
-RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-RUN usermod -s /bin/zsh abc
-
-RUN apt-get auto-remove -y && \
-    apt-get clean && \
-    rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
-
 # VSCode extensions
 RUN code-server --install-extension ms-python.python && \
     code-server --install-extension vscode.npm &&  \
@@ -66,5 +58,13 @@ RUN code-server --install-extension ms-python.python && \
     code-server --install-extension ms-azuretools.vscode-docker && \
     code-server --install-extension redhat.vscode-yaml && \
     code-server --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
+
+# OhMyZsh
+RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+RUN usermod -s /bin/zsh abc
+
+RUN apt-get auto-remove -y && \
+    apt-get clean && \
+    rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 EXPOSE 8443
