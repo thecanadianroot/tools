@@ -51,8 +51,10 @@ RUN apt install -y build-essential \
     redis-tools
 
 # OhMyZsh
-RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-RUN usermod -s /bin/zsh abc
+RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
+    usermod -s /bin/zsh abc && \
+    usermod -s /bin/zsh root && \
+    sed -i '1s/^/ZSH_DISABLE_COMPFIX="true"\n/' /config/.zshrc
 
 RUN apt-get auto-remove -y && \
     apt-get clean && \
