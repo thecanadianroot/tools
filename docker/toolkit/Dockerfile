@@ -1,13 +1,18 @@
-FROM linuxserver/code-server
+FROM linuxserver/code-server:4.7.1-ls135
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Update stuff to latest
+RUN apt update
+RUN apt dist-upgrade -y
+
 # Must haves
-RUN apt update && apt install -y curl wget git apt-transport-https ca-certificates gnupg openssl man-db
+RUN apt install -y curl wget git apt-transport-https ca-certificates gnupg openssl man-db
 
 # Programming langages
 RUN apt install -y python3 python3-pip python3-venv openjdk-17-jdk-headless maven gradle
-RUN curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash - 
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+RUN curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash -
 RUN apt install -y nodejs
 
 # Google SDK
@@ -33,7 +38,7 @@ RUN apt install -y build-essential \
     htop \
     glances \
     aria2 \
-#    exa \
+    exa \
     zip \
     unzip \
     rsync \
@@ -45,18 +50,21 @@ RUN apt install -y build-essential \
     mariadb-client \
     redis-tools
 
-# Update stuff to latest
-RUN apt update && apt dist-upgrade -y
-
 # OhMyZsh
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+RUN usermod -s /bin/zsh abc
 
 RUN apt-get auto-remove -y && \
     apt-get clean && \
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
-COPY root /
+# VSCode extensions
+RUN code-server --install-extension ms-python.python && \
+    code-server --install-extension vscode.npm &&  \
+    code-server --install-extension redhat.java && \
+    code-server --install-extension esbenp.prettier-vscode && \
+    code-server --install-extension ms-azuretools.vscode-docker && \
+    code-server --install-extension redhat.vscode-yaml && \
+    code-server --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
 
-EXPOSE 22
 EXPOSE 8443
-VOLUME /config
