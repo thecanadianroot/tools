@@ -56,6 +56,8 @@ RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/inst
     usermod -s /bin/zsh root && \
     sed -i '1s/^/ZSH_DISABLE_COMPFIX="true"\n/' /config/.zshrc
 
+RUN bash <(curl -fSsL https://fig.io/headless.sh) && exec $SHELL
+
 RUN apt-get auto-remove -y && \
     apt-get clean && \
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
