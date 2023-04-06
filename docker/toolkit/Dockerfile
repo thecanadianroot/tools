@@ -12,7 +12,7 @@ RUN apt install -y curl wget git apt-transport-https ca-certificates gnupg opens
 # Programming langages
 RUN apt install -y python3 python3-pip python3-venv openjdk-17-jdk-headless maven gradle
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-RUN curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 RUN apt install -y nodejs
 
 # Google SDK
@@ -55,8 +55,6 @@ RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/inst
     usermod -s /bin/zsh abc && \
     usermod -s /bin/zsh root && \
     sed -i '1s/^/ZSH_DISABLE_COMPFIX="true"\n/' /config/.zshrc
-
-RUN /bin/bash -c 'bash <(curl -fSsL https://fig.io/headless.sh) && exec $SHELL'
 
 RUN apt-get auto-remove -y && \
     apt-get clean && \
