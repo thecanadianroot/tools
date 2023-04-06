@@ -1,11 +1,8 @@
 name: CI - Build and push Toolkit
 
 on:
-  schedule:
-    - cron: 0 0 * * 0 # Every week
   push:
     branches: [ main ]
-    paths: [ 'docker/toolkit/**', '.github/workflows/toolkit.yaml' ]
   workflow_dispatch:
 
 jobs:
