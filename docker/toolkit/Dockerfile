@@ -1,4 +1,4 @@
-FROM linuxserver/code-server:4.11.0
+FROM linuxserver/code-server:4.13.0
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -46,9 +46,13 @@ RUN apt install -y build-essential \
     pwgen \
     iputils-ping \
     dnsutils \
-    postgresql-client \
+    postgresql-common \
     mariadb-client \
     redis-tools
+
+# Install latest postgresql client
+RUN yes | sh /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+RUN apt install -y postgresql-client
 
 # OhMyZsh
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
