@@ -48,8 +48,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: docker/toolkit/
-          push: ${{ vars.DEBUG == 'true' }}
-          # load: ${{ vars.DEBUG != 'true' }}
+          push: true
           platforms: |
             linux/amd64
             linux/arm64
@@ -59,7 +58,6 @@ jobs:
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-cache,mode=max
       
       - name: Test Docker image
-        if: ${{ vars.DEBUG != 'true' }}
         run: |
           docker run -d -p 8443:8443 ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-${{ github.event.pull_request.number }}
           URL="http://localhost:8443"
