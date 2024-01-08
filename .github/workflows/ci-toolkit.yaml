@@ -31,17 +31,25 @@ jobs:
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ github.repository_owner }}/docker-toolkit
+            ghcr.io/${{ github.repository }}/docker-toolkit
+            ghcr.io/${{ github.repository_owner }}/docker-toolkit
+          tags: |
+            type=raw,value={{date 'YYYY.MM.DD-HHmmss'}}
+            type=raw,value=latest
+            type=sha
+
+      - name: Build Docker image
         uses: docker/build-push-action@v3
         with:
           context: docker/toolkit/
           push: true
-          tags: |
-            ${{ github.repository_owner }}/docker-toolkit:latest
-            ${{ github.repository_owner }}/docker-toolkit:${{ github.sha }}
-            ghcr.io/${{ github.repository }}/docker-toolkit:latest
-            ghcr.io/${{ github.repository }}/docker-toolkit:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/docker-toolkit:latest
-            ghcr.io/${{ github.repository_owner }}/docker-toolkit:${{ github.sha }}
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:cache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:cache,mode=max
