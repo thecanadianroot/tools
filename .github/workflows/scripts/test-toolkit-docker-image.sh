@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep 5
+
 URL="http://localhost:8443"
 
 for i in {1..3}; do
