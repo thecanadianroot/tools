@@ -10,9 +10,9 @@ RUN apt dist-upgrade -y
 RUN apt install -y curl wget git apt-transport-https ca-certificates gnupg openssl man-db
 
 # Programming langages
-RUN apt install -y python3 python3-pip python3-venv openjdk-17-jdk-headless maven gradle
+RUN apt install -y python3 python3-pip python3-venv openjdk-21-jdk-headless maven gradle
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 RUN apt install -y nodejs
 
 # Google SDK
