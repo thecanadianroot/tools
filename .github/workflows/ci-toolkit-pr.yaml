@@ -61,15 +61,15 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-cache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-cache,mode=max
       
-      - name: Test code-server availability
+      - name: Test Docker image
         if: ${{ vars.DEBUG != 'true' }}
         run: |
           docker run -d -p 8443:8443 ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-${{ github.event.pull_request.number }}
           URL="http://localhost:8443"
 
           for i in {1..3}; do
-              status_code=$(curl -o /dev/null -s -w "%{http_code}\n" $URL)
-              
+              status_code=$(curl -o /dev/null -s -w "%{http_code}\n" -L $URL)
+
               if [[ $status_code -eq 200 ]]; then
                   echo "URL returned 200 OK on attempt $i"
                   break
@@ -82,6 +82,6 @@ jobs:
                       exit 1
                   fi
               fi
-              
+
               sleep 10
           done
