@@ -1,24 +1,22 @@
-name: CI - Build and push Toolkit
+name: CI - Build and push Caddy
 
 on:
   push:
     branches: [ main ]
     paths:
-      - docker/toolkit/**
+      - docker/caddy/**
+      - .github/workflows/ci-caddy.yml
   workflow_dispatch:
 
 jobs:
-  build-toolkit:
-    name: Build Toolkit
+  build-caddy:
+    name: Build Caddy
     runs-on: ubuntu-latest
     permissions:
       packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -41,9 +39,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ github.repository_owner }}/docker-toolkit
-            ghcr.io/${{ github.repository }}/docker-toolkit
-            ghcr.io/${{ github.repository_owner }}/docker-toolkit
+            ${{ github.repository_owner }}/caddy
+            ghcr.io/${{ github.repository }}/caddy
+            ghcr.io/${{ github.repository_owner }}/caddy
           tags: |
             type=raw,value={{date 'YYYY.MM.DD-HHmmss'}}
             type=raw,value=latest
@@ -52,12 +50,9 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: docker/toolkit/
+          context: docker/caddy/
           push: true
-          platforms: |
-            linux/amd64
-            linux/arm64
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:cache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:cache,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/caddy:cache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/caddy:cache,mode=max

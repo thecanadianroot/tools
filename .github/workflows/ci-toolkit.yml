@@ -1,15 +1,12 @@
 name: CI - Build and push Toolkit
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
+    branches: [ main ]
     paths:
       - docker/toolkit/**
-
-permissions:
-  contents: write
-  pull-requests: write
-
+      - .github/workflows/ci-toolkit.yml
+  workflow_dispatch:
 
 jobs:
   build-toolkit:
@@ -20,9 +17,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -49,34 +43,16 @@ jobs:
             ghcr.io/${{ github.repository }}/docker-toolkit
             ghcr.io/${{ github.repository_owner }}/docker-toolkit
           tags: |
-            type=ref,event=pr
+            type=raw,value={{date 'YYYY.MM.DD-HHmmss'}}
+            type=raw,value=latest
+            type=sha
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: docker/toolkit/
           push: true
-          platforms: |
-            linux/amd64
-            linux/arm64
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-cache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-cache,mode=max
-      
-      - name: Test Docker image
-        run: |
-          docker run -d -p 8443:8443 ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-${{ github.event.pull_request.number }}
-          ./.github/workflows/scripts/test-toolkit-docker-image.sh
-  
-    # https://docs.github.com/en/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions
-  dependabot:
-    needs: [build-toolkit]
-    runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
-    steps:
-      - name: Enable auto-merge for Dependabot PRs
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh pr merge --auto --squash ${{ github.event.pull_request.html_url }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:cache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:cache,mode=max
