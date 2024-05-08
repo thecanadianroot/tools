@@ -1,4 +1,4 @@
-name: CI - Build and push Toolkit
+name: CI - Build and push Caddy
 
 on:
   pull_request:
@@ -10,8 +10,8 @@ permissions:
 
 
 jobs:
-  build-toolkit:
-    name: Build Toolkit
+  build-caddy:
+    name: Build Caddy
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -43,33 +43,28 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ github.repository_owner }}/docker-toolkit
-            ghcr.io/${{ github.repository }}/docker-toolkit
-            ghcr.io/${{ github.repository_owner }}/docker-toolkit
+            ${{ github.repository_owner }}/caddy
+            ghcr.io/${{ github.repository }}/caddy
+            ghcr.io/${{ github.repository_owner }}/caddy
           tags: |
             type=ref,event=pr
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: docker/toolkit/
+          context: docker/caddy/
           push: true
           platforms: |
             linux/amd64
             linux/arm64
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-cache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-cache,mode=max
-      
-      - name: Test Docker image
-        run: |
-          docker run -d -p 8443:8443 ghcr.io/${{ github.repository_owner }}/docker-toolkit:pr-${{ github.event.pull_request.number }}
-          ./.github/workflows/scripts/test-toolkit-docker-image.sh
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/caddy:pr-cache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/caddy:pr-cache,mode=max
   
     # https://docs.github.com/en/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions
   dependabot:
-    needs: [build-toolkit]
+    needs: [build-caddy]
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
