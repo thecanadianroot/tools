@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - docker/toolkit
+      - ./docker/toolkit
   workflow_dispatch:
 
 jobs:
