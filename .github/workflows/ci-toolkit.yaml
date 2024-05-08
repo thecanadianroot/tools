@@ -3,8 +3,6 @@ name: CI - Build and push Toolkit
 on:
   push:
     branches: [ main ]
-    paths:
-      - ./docker/toolkit
   workflow_dispatch:
 
 jobs:

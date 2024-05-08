@@ -3,8 +3,6 @@ name: CI - Build and push Toolkit
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - ./docker/toolkit
 
 permissions:
   contents: write

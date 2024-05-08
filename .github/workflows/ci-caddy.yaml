@@ -3,8 +3,6 @@ name: CI - Build and push Caddy
 on:
   push:
     branches: [ main ]
-    paths:
-      - ./docker/caddy
   workflow_dispatch:
 
 jobs:

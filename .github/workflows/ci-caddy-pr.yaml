@@ -3,8 +3,6 @@ name: CI - Build and push Caddy
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - ./docker/caddy
 
 permissions:
   contents: write
