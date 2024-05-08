@@ -6,3 +6,4 @@ Tools that I developed for my personal usage:
   environment (like a docker-compose stack or a Kubernetes cluster) to communicate with other containers while also
   being able to easily run some scripts within the web IDE. Comes with an OpenSSH server for easy integration with
   Jetbrains' tools or SSH tunneling shenanigans.
+- [Caddy](docker/caddy): A custom Caddy image with Cloudflare module.
