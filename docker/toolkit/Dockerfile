@@ -38,7 +38,6 @@ RUN apt install -y build-essential \
     htop \
     glances \
     aria2 \
-    exa \
     zip \
     unzip \
     rsync \
