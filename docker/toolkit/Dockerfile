@@ -1,4 +1,4 @@
-FROM linuxserver/code-server:4.132.0
+FROM linuxserver/code-server:4.133.0
 
 ENV DEBIAN_FRONTEND noninteractive
 
